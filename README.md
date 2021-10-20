@@ -1,5 +1,5 @@
 # Automation_Project
-created new branch and added script file
+created new "dev" branch and added script file
 
 Updates the apt repository and installs apache2
 
