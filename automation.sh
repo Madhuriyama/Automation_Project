@@ -1,8 +1,14 @@
+s3bucketname="upgrad-madhuri"
+
 sudo apt update -y
-apt install apache2
-/etc/init.d/apache2 start
-systemctl enable apache2
-tar -zcvf "/tmp/madhuri-httpd-logs-$(date).tar.gz" /var/log/apache2/
-aws s3 \
-cp /tmp/madhuri-httpd-logs-$(date '+%d%m%Y-%H%M%S').tar \
-s3://upgrad-madhuri/madhuri-httpd-logs-$(date '+%d%m%Y-%H%M%S').tar
+sudo apt install apache2
+sudo /etc/init.d/apache2 start
+sudo systemctl enable apache2
+TimeCreated=$(date +%d%m%Y-%H%M%S)
+
+sudo tar -zcvf "/tmp/madhuri-httpd-logs-$TimeCreated.tar.gz" /var/log/apache2/
+sudo aws s3 cp /tmp/madhuri-httpd-logs-$TimeCreated.tar.gz s3://$s3bucketname/madhuri-httpd-logs-$TimeCreated.tar
+
+sudo touch /etc/cron.d/automation
+echo "30 18 * * * sh /root/Automation_Project/automation.sh" > /etc/cron.d/automation
+sudo /usr/bin/crontab /etc/cron.d/automation
